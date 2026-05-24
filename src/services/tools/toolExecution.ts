@@ -1473,10 +1473,8 @@ async function checkPermissionsAndCallTool(
       })
     }
 
-    // TOOD(hackyon): refactor so we don't have different experiences for MCP tools
-    if (!isMcpTool(tool)) {
-      await addToolResult(toolOutput, mappedToolResultBlock)
-    }
+    // All tools get the same rendering path — no MCP/built-in bifurcation
+    await addToolResult(toolOutput, mappedToolResultBlock)
 
     const postToolHookInfos: StopHookInfo[] = []
     const postToolHookStart = Date.now()
@@ -1535,10 +1533,6 @@ async function checkPermissionsAndCallTool(
         `Slow PostToolUse hooks: ${postToolHookDurationMs}ms for ${tool.name} (${postToolHookInfos.length} hooks)`,
         { level: 'info' },
       )
-    }
-
-    if (isMcpTool(tool)) {
-      await addToolResult(toolOutput)
     }
 
     // Show PostToolUse hook timing inline below tool result when > 500ms.
